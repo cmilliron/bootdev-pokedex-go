@@ -10,7 +10,12 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*Config) error
+}
+
+type Config struct {
+	Next	string
+	Prev	*string
 }
 
 
@@ -18,6 +23,9 @@ func StartRepl() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	commandRegistry := getCommands()
+	cfg := Config{
+		Next: "https://pokeapi.co/api/v2/location-area",
+	}
 
 	for {
 		fmt.Printf("Pokedex > ")
@@ -33,7 +41,7 @@ func StartRepl() {
 		// fmt.Printf("Your command was: %s\n", commandName)
 		replCommand, ok := commandRegistry[commandName]
 		if ok {
-			err := replCommand.callback()
+			err := replCommand.callback(&cfg)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -45,16 +53,9 @@ func StartRepl() {
 	}
 }
 
-// Commands
-
-
-
-
 func NormalizeAndSplitInput(text string) []string {
 	lowercaseInput := strings.ToLower(text)
-
 	words := strings.Fields(lowercaseInput)
-
 	return words
 }
 
@@ -70,5 +71,16 @@ func getCommands() map[string]cliCommand {
 			description: "Displays a help message",
 			callback: handleHelpCommand,
 		},
+		"map": {
+			name: "map",
+			description: "Displays the next 20 locations",
+			callback: handleMapCommand,
+		},
+		"mapb": {
+			name: "map",
+			description: "Displays the previous 20 locations",
+			callback: handleMapBCommand,
+		},
+
 	}
 }
