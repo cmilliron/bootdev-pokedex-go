@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/cmilliron/bootdev-pokedex-go/internal/pokeapi"
 )
 
 type cliCommand struct {
@@ -14,18 +16,16 @@ type cliCommand struct {
 }
 
 type Config struct {
-	Next	string
-	Prev	*string
+	pokeapiClient	pokeapi.Client
+	nextLocationURL	*string
+	prevLocationURL	*string
 }
 
 
-func StartRepl() {
+func StartRepl(cfg *Config) {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	commandRegistry := getCommands()
-	cfg := Config{
-		Next: "https://pokeapi.co/api/v2/location-area",
-	}
 
 	for {
 		fmt.Printf("Pokedex > ")
@@ -41,7 +41,7 @@ func StartRepl() {
 		// fmt.Printf("Your command was: %s\n", commandName)
 		replCommand, ok := commandRegistry[commandName]
 		if ok {
-			err := replCommand.callback(&cfg)
+			err := replCommand.callback(cfg)
 			if err != nil {
 				fmt.Println(err)
 			}
