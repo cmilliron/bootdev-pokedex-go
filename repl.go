@@ -16,7 +16,8 @@ type cliCommand struct {
 }
 
 type Config struct {
-	pokeapiClient	pokeapi.Client
+	pokeapiClient	*pokeapi.Client
+	// pokeCache		*pokecache.Cache
 	nextLocationURL	*string
 	prevLocationURL	*string
 }

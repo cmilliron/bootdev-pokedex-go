@@ -18,6 +18,7 @@ func handleMapCommand(cfg *Config) error {
 	if err != nil {
 		return err
 	}
+
 	cfg.nextLocationURL = locations.Next
 	cfg.prevLocationURL = locations.Previous
 	displayLocation(locations)
