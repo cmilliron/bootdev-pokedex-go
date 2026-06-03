@@ -11,7 +11,7 @@ import (
 
 
 
-func handleMapCommand(cfg *Config) error {
+func handleMapCommand(cfg *Config, args ...string) error {
 	// fmt.Printf("Next: %s\nPrev: %v\n", cfg.Next, *cfg.Prev)
 
 	locations, err := cfg.pokeapiClient.GetLocations(cfg.nextLocationURL)
@@ -25,7 +25,7 @@ func handleMapCommand(cfg *Config) error {
 
 	return nil
 }
-func handleMapBCommand(cfg *Config) error {
+func handleMapBCommand(cfg *Config, args ...string) error {
 	locations, err := cfg.pokeapiClient.GetLocations(cfg.prevLocationURL)
 	if err != nil {
 		return err
